@@ -1,0 +1,67 @@
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <div id="timer">
+        <p id=time>{{ timeMin }} : {{ timeSec }}</p>
+        <button v-on:click="McountUp(3)">3分</button>
+        <button v-on:click="McountUp(5)">5分</button>
+        <button v-on:click="ScountUp(10)">10秒</button>
+        <button v-on:click="start" v-if="!timerOn">Start</button>
+        <button v-on:click="stop" v-if="timerOn">Stop</button>
+    </div>
+
+    <script>
+        new Vue({
+            el:"#timer",
+            data:{
+                timeMin:00,
+                timeSec:00,
+                timerOn: false,
+                time:00,
+                timerObj: null,
+            },
+            methods: {
+                updateTime: function() {
+                    let current_date = new Date()
+                    this.time = current_date.getHours()
+                },
+                count: function() {
+                    if(this.timesec <= 0 && this.timeMin >= 1) {
+                        this.timeMin = this.min -1;
+                        this.timeSec = 59;
+                    } else if(this.timeSec <= 0 && this.timeMin <= 0) {
+                        this.complete();
+                    } else {
+                        this.timeSec = this.timeSec -1;
+                    }
+                },
+                McountUp:function(min){
+                    this.timeMin = this.timeMin + min
+                },
+                ScountUp:function(sec){
+                    this.timeSec = this.timeSec + sec
+                },
+                start: function() {
+                    let self = this;
+                    this.timerOn = true;
+                    this.timerObj = setInterval(function() {self.count()}, 1000)
+
+                },
+                stop: function() {
+                    clearInterval(this.timerObj);
+                    this.timerOn = false;
+                },
+                complete: function() {
+                    clearInterval(this.timerObj);
+                    alert("タイマーが終了しました");
+                }
+
+            }
+        })
+    </script>
+
+</body>
+</html>
